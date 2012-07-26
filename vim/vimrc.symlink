@@ -1,0 +1,256 @@
+"--------------------------------------------------
+" David Liffmann, inspired by Lothar Becker
+" VIM config file for Version 7.x
+" Last modified: 2011-04-29
+"--------------------------------------------------
+
+" Use a colorscheme that works well with a dark background
+
+colorscheme desert
+
+" Settings {{{
+    " Don't let vim behave like ancient vi
+    set nocompatible
+
+    set encoding=utf-8
+
+    set tabpagemax=50
+
+    set spelllang=de
+
+    " Rechtschreibprüfung ein- ausschalten mit F2
+    map <F2> :set spell!<CR><Bar>:echo "Spell check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+
+    " Nur Top 10 (Rechtschreibprüfung) anzeigen
+    set sps=best,10
+
+    set termencoding=utf-8
+
+    set shellslash
+
+    " Enable syntax highlighting
+    syntax on
+
+    " Highlight search matches
+    set hlsearch
+
+    " Go to matches while typing
+    set incsearch
+
+    " Use {{{ and }}} as the fold method
+    set foldmethod=marker 
+
+    " Ignore capital/small letters in searches, but ignore this setting if you use
+    " capital letters
+    set ignorecase
+    set smartcase
+
+    " Show line numbers
+    set number
+
+    " Try to be smart
+    set smartindent
+
+    " Indent 4 spaces, expand tabs to spaces
+    set shiftwidth=4
+    set softtabstop=4
+    set expandtab
+
+    " Prevent bad looking copy & paste
+    set pastetoggle=<F8>
+
+    " Show the current mode
+    set showmode
+
+    " Show the current cursor position 
+    set ruler
+
+    " Don't annoy me when I am changing buffers
+    set hidden
+
+    " But ask me before I am losing non saved stuff
+    set confirm
+
+    " Insert a space after .?! when joining two lines
+    set nojoinspaces
+
+    " backspacing over everything in insert mode
+    set backspace=indent,eol,start
+
+    " read open files again when changed outside Vim
+    set autoread
+    
+    " enable the use of the mouse
+    set mouse=a
+
+    " Make the statusline two lines high
+    set laststatus=2
+
+    " Modeline only valid in the first line
+    set modelines=1
+
+    " Preserver column during motion commands
+    set nostartofline
+
+    " Remember how we left vim
+    set viminfo='20,\"50
+
+    " How many commands should be saved in the history
+    set history=50
+
+    " Text should only be 79 columns wide
+    set tw=79
+
+    " Useful for reStructuredText. 
+    let @h="yypVr"
+
+    " assume the /g flag on :s substitutions
+    set gdefault
+
+    if (&term =~ '^screen')
+       " set title for screen
+       " VimTip http://vim.wikia.com/wiki/VimTip1126
+       " important  is <ctrl>+<escape>
+       set t_ts=k
+       set t_fs=\
+       let &titleold = fnamemodify(&shell, ":t")
+       set title
+       set titlelen=15
+       " set information for title in screen (see :h 'statusline')
+       set titlestring=(vim):%t%=%<%(\ [%{&modified?'+':'-'}]\ %)
+    endif
+
+    let g:Tex_DefaultTargetFormat='pdf'
+
+    let g:vimwiki_list = [{'path': '~/stuff/wiki/wiki',
+                    \ 'ext': '.wiki',
+                    \ 'auto_export': 1,
+                    \ 'template_path': '~/stuff/wiki/wiki/templates/',
+                    \ 'template_default': 'def_template',
+                    \ 'template_ext': '.html'}]
+
+
+    " yankring settings
+    let g:yankring_max_history = 250
+    let g:yankring_history_dir = '$HOME/.vim'
+
+    " ack plugin settings
+    let g:ackprg="ack-grep -H --nocolor --nogroup --column"
+
+    " }}}
+
+" Mappings {{{
+    " Toggle highlight search with Ctrl+l (small L)
+    map <silent> <c-l> :silent nohl<cr>
+    " Hightlight cursorline. Toggle with F3
+    map <F3> :set cursorline!<CR><Bar>:echo "Highlight active cursor line: " . strpart("OffOn", 3 * &cursorline, 3)<CR>
+
+    " Fix PageUp/Down etc (Recover the cursor position)
+    " C-U/D only scroll half a screen. PageUp/Down should scroll a full screen.
+    " Using them twice is visible -> Tell them to scroll 1k lines will make
+    " them scroll a full screen.
+    map <PageUp> 1000<C-U>
+    map <PageDown> 1000<C-D>
+    imap <PageUp> <C-O>1000<C-U>
+    imap <PageDown> <C-O>1000<C-D>
+
+    " Access BufExplorer much easier
+    map <leader>o :BufExplorer<cr>
+
+    " Toggle a nice representation for the undo tree
+    nnoremap <F5> :GundoToggle<CR>
+
+" }}}
+
+" Abbreviations {{{
+    " time stamp 2011-04-23
+    iab mydl <c-r>=strftime("%Y-%m-%d")<CR>
+" }}}
+
+" Autocommands {{{
+    filetype plugin on
+    filetype plugin indent on
+   
+    " Disable syntax highlighting for files bigger half a megabyte, because it
+    " is too slow 
+    au BufReadPost * if getfsize(bufname("%")) > 512*1024 | set syntax= | endif
+    
+    au BufWinEnter * call Resize_cmdheight_on_scp()
+
+    " Use perldoc for the K feature (show manpage)
+    au BufReadPost *.pl set keywordprg=perldoc\ -f
+    au BufWritePost *.pl silent !chmod +x %
+    au BufWritePost *.py silent !chmod +x %
+    au BufWritePost ~/.vimrc :source %
+" }}}
+
+" Functions {{{
+    " Set cmdlineheight=2 when switching to a windows with an open scp file
+    " (surpresses the 'press enter to continue'-message). Otherwise (re-)set it
+    " to 1
+    function! Resize_cmdheight_on_scp()
+        if match(bufname("%"), "^scp:") >= 0
+            set cmdheight=2 
+        else 
+            set cmdheight=1 
+        endif
+    endfunction
+" }}}
+
+" Plugins {{{
+    " Vundle {{{
+        filetype off                   " required!
+        set rtp+=~/.vim/bundle/vundle/
+        call vundle#rc()
+
+        Bundle 'gmarik/vundle'
+        Bundle 'tpope/vim-surround'
+        Bundle 'tpope/vim-repeat'
+        Bundle 'tpope/vim-fugitive'
+        Bundle 'scrooloose/nerdtree'
+        Bundle 'scrooloose/nerdcommenter'
+        Bundle 'vim-scripts/YankRing.vim'
+        " Needed for snipmate to work
+        Bundle "MarcWeber/vim-addon-mw-utils"
+        Bundle 'tomtom/tlib_vim'
+        Bundle 'Ahg4goo9/snipmate-snippets'
+        Bundle 'garbas/vim-snipmate'
+        " better than grep
+        Bundle 'mileszs/ack.vim'
+
+        " smart indent python stuff
+        Bundle 'michaeljsmith/vim-indent-object'
+
+        " vim-align, smart align stuff. useful for Perl
+        Bundle 'tsaleh/vim-align'
+        Bundle 'vimwiki'
+
+        " improved matching of stuff
+        Bundle 'vimcn/matchit.vim'
+
+        " graphical undo tree
+        Bundle 'sjl/gundo.vim'
+
+        " syntax checker
+         Bundle 'scrooloose/syntastic'
+
+        " non github
+        Bundle 'git://git.wincent.com/command-t.git'
+    " }}}
+    filetype plugin indent on
+    syntax on
+
+" }}}
+
+" {{{ Gui options
+    " remove menu bar
+    set guioptions-=m
+
+    " remove toolbar
+    set guioptions-=T
+
+    " remove right-hand scroll bar
+    :set guioptions-=r  "
+
+"}}}
+
