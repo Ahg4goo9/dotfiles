@@ -137,6 +137,9 @@ colorscheme desert
     " ack plugin settings
     let g:ackprg="ack-grep -H --nocolor --nogroup --column"
 
+    " , is way more accessable than \
+    let mapleader=","
+
     " }}}
 
 " Mappings {{{
@@ -160,6 +163,9 @@ colorscheme desert
     " Toggle a nice representation for the undo tree
     nnoremap <F5> :GundoToggle<CR>
 
+    " ' is easier to acccess, ` is more usefule -> switch them
+    nnoremap ' `
+    nnoremap ` '
 " }}}
 
 " Abbreviations {{{
