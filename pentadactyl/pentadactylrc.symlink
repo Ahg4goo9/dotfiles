@@ -46,4 +46,6 @@ set nextpattern='\b(weiter...|next|more|weiter|nächste|Nächste|Vorwärts|Älte
 
 autocmd LocationChange ^https?://docs\.google\.com/ :normal! <C-z>
 
+colorscheme desert
+
 " vim: set ft=pentadactyl:
