@@ -1,0 +1,49 @@
+"1.0b7.2 "(created 2011/08/05 11:03:59)"
+
+loadplugins '\.(js|penta)$'
+group user
+highlight Boolean color: #ffa0a0;
+highlight BufTabSelected color: #f0e685; background: #6b8e23;
+highlight CompDesc color: #c6c6c6; width: 50%; padding-left: 1em; font-weight: normal !important;
+highlight CompItem[selected] background: #6b8e23; color: #f0e685;
+highlight CompTitle color: #78cee4 !important; background: #000000 !important; font-weight: bold;
+highlight Disabled color: #bb493b;
+highlight Enabled color: #6b8e23;
+highlight Function color: #ffffff;
+highlight GradientLeft background-color: white;
+highlight GradientRight background-color: black;
+highlight Indicator color: #c6c6c6; width: 1.5em; text-align: center;
+highlight InfoMsg color: #ffffff !important; background: #333333 !important;
+highlight LineNr color: #78cee4 !important; background: #333333 !important;
+highlight Message white-space: pre-wrap !important; min-width: 100%; width: 100%; padding-left: 4em; text-indent: -4em; display: block; color: #ffffff !important;
+highlight ModeMsg color: #ffffff !important; background: #333333 !important;
+highlight MoreMsg color: #6b8e23 !important; background: #333333 !important;
+highlight NonText color: #add8e6; background: #4d4d4d; min-height: 16px; padding-left: 2px;
+highlight Normal color: #ffffff !important; background: #333333 !important; font-weight: bold !important;
+highlight Null color: #ffa0a0;
+highlight Number color: #ffa0a0;
+highlight Object color: #ffffff;
+highlight Question color: #6b8e23 !important; background: #333333 !important; font-weight: bold !important;
+highlight StatusLine -moz-appearance: none !important; font-weight: bold !important; background: transparent !important; border: 0px !important; padding-right: 0px !important; min-height: 18px !important; text-shadow: none !important; color: #ffffff !important; background-color: #000000 !important;
+highlight StatusQuestion color: #6b8e23 !important; background: inherit !important;
+highlight String color: #ffa0a0; white-space: pre;
+highlight Title color: #78cee4; font-weight: bold; background: #333333;
+highlight URL text-decoration: none; color: #78cee4; background: inherit;
+highlight WarningMsg color: #ffa0a0 !important; background: #333333 !important;
+
+set strictfocus=*:laissez-faire
+map -modes=n,v -silent <C-l> <count><count>:silent<Space>nohl<Return>
+set editor='gvim -f'
+set nextpattern='\b(weiter...|next|more|weiter|nächste|Nächste|Vorwärts|Ältere)$\b',^>$,'^(>>|»)$','^(>|»)','(>|»)$'
+" {{{ passkeys
+    set passkeys+='mail\.google\.com':c/jkhnpouelxysfra#`[]z?*nrtgidIU+-=<Tab><Return><Space>
+    set passkeys+='mail\.google\.com/tasks/canvas':<Tab><S-Tab><Return>
+    set passkeys+='google\.com/reader':jkvnpbumoasAXNOVPJK?gehtl<Return><up><down>
+    set passkeys+='twitter\.com':jk<Space>/.frtmn?ghrpu<Return>
+    set passkeys+='www\.google\.com/calendar':dwmxajkcnqetp?<Del>s12345<Return>
+    set previouspattern='\b(Vorherige|prev|previous|zurück|Neuere)$\b',^<$,'^(<<|«)$','^(<|«)','(<|«)$'
+" }}} passkeys
+
+autocmd LocationChange ^https?://docs\.google\.com/ :normal! <C-z>
+
+" vim: set ft=pentadactyl:
